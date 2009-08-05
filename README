@@ -1,0 +1,51 @@
+HUGOMATIC README
+
+
+Hugomatic is a library for GCODE generation in Python.
+
+
+RUNNING ON LOCAL MACHINE
+========================
+
+Windows:
+You need to install Python 2.5 or later
+
+Linux:
+
+Mac:
+?
+
+
+
+
+WEB SERVER INSTRUCTION
+======================
+
+To run the application as a web server on your local machine, execute the python script httpd.py in the hugomatic/web directory.
+
+python httpd.py
+
+Because it is a cgi application, every Python file that corresponds to a web page must be executable. Setting the executable flag for every Python file is a good strategy. 
+
+Here's a typical error:
+
+
+localhost - - [23/Jan/2009 17:46:43] "GET /index.py HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/usr/lib/python2.5/CGIHTTPServer.py", line 251, in run_cgi
+    os.execve(scriptfile, args, os.environ)
+OSError: [Errno 13] Permission denied
+
+
+As an example, here's the Unix command to set the index.py file to executable:
+
+chmod +x index.py
+
+Finally, the Python executable path must be set correctly. Every script has the following comment:
+
+#!/usr/bin/python
+
+You may have to create a link to your Python executable in your /usr/bin directory or change the comment to something like:
+
+#!env python
+
