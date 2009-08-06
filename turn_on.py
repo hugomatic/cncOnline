@@ -32,7 +32,7 @@ def take_a_break():
     a = 42
     
 # Create the Parameters object. It is used to create the GUI and set values in global variables
-params = hugomatic.toolkit.Parameters('Hello', 'Hello programs make nice templates', 
+params = hugomatic.toolkit.Parameters('Lathe turning', 'Turn a shaft with increasing diameter from the left', 
                                       picture_file="turn.gif", # picture on the left
                                       debug_callback=take_a_break)
 # publish a string. Force the user to select the value from a predetermined list 
