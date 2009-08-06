@@ -1,0 +1,3 @@
+[submodule "hugomatic"]
+	path = hugomatic
+	url = git@github.com:hugomatic/hugomatic.git
