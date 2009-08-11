@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><Hugomatic name="Hugomatic GCODE generators xxx">
+ 
+  <Primitives>
+   <Pockets>
+      <py name="pocketRect2points.py"/><py name="cylinder.py"/><py name="pieSegmentClockwise.py"/>
+      
+   </Pockets>
+   <py name="rectangle.py"/>
+   <py name="roundrectangle.py"/><py name="helicalcircle.py"/> 
+       
+   <Snippets>
+     <py name="helloWorld.py"/>
+   </Snippets>
+  </Primitives>
+ 
+ <Tools>
+  <py name="holecircle.py"/>
+  <py name="svgEngraver.py"/>
+  <py name="gear.py"/>
+ </Tools>
+ <Calculators>
+  <py name="vcutter.py"/>
+  <py name="tap_drill.py"/>  
+ </Calculators>
+ <Projects>
+  <py name="pillow_block.py"/>
+  <py name="tictactoe.py"/>
+  <py name="toolTable.py"/>
+  <project name="LED gizmo">
+      <py name="svgEngraver.py"/>
+      <py name="gizmoLed.py"/>
+  </project>
+ </Projects>
+<Catalog/><Selected>Tools/svgEngraver.py</Selected></Hugomatic>

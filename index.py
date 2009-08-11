@@ -52,7 +52,7 @@ def getCatalogFileName():
     f = inspect.getfile(getCatalogFileName)
     tail,head = os.path.split(f)
     short_name = head.replace(".py",".xml")
-    filename = tail + "/hugomatic/" + short_name
+    filename = tail + "/" + short_name
     return filename
 
 def removeElement(dom, name):
@@ -83,10 +83,12 @@ def loadCatalog():
 
 if isWebApplication():
     import hugomatic.web.index
-    #files = getGenerators()
     dom, selectionText = loadCatalog()
-    
-    hugomatic.web.index.printIndex(dom)
+    header = """<h1>Astromount</h1>
+    <h2>Star tracking tripod mount for digital astro photography</h2>
+    <p>Based on Hugomatic G-Code generators</p>
+    """
+    hugomatic.web.index.print_index(dom, header)
     sys.exit(2)
     
 ################################################
