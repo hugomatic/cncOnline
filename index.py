@@ -85,8 +85,8 @@ if isWebApplication():
     import hugomatic.web.index
     dom, selectionText = loadCatalog()
     header = """<h1>CNC Online</h1>
-    <h2>Useful G-Code routines</h2>
-    <p>Based on Hugomatic G-Code generators</p>
+    <h2>Useful interactive G-Code routines</h2>
+    <p>Based on Hugomatic generator Python library</p>
     """
     hugomatic.web.index.print_index(dom, header)
     sys.exit(2)
