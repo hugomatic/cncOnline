@@ -84,8 +84,8 @@ def loadCatalog():
 if isWebApplication():
     import hugomatic.web.index
     dom, selectionText = loadCatalog()
-    header = """<h1>Astromount</h1>
-    <h2>Star tracking tripod mount for digital astro photography</h2>
+    header = """<h1>CNC Online</h1>
+    <h2>Useful G-Code routines</h2>
     <p>Based on Hugomatic G-Code generators</p>
     """
     hugomatic.web.index.print_index(dom, header)
