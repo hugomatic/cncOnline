@@ -171,7 +171,7 @@ if params.loadParams():
         
         # large pocket for the plexi
         cuts = hugomatic.code.z_cut_compiler(zdepth, cut, zsurf= 0.0)
-        hugomatic.code.pocketRectangle(xleft, ytop, xright, ybottom, zsafe, zSurf, tooldia, cuts)
+        hugomatic.code.pocketRectangle(xleft, ytop, xright, ybottom, zsafe, zsurf, tooldia, cuts)
     
     # LED array
     if bottom:
