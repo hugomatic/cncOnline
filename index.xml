@@ -14,7 +14,7 @@
   </Primitives>
  
  <Tools>
-  <py name="holecircle.py"/>
+  <py name="drillcircle.py"/>
   <py name="svgEngraver.py"/>
   <py name="gear.py"/>
  </Tools>

@@ -21,7 +21,7 @@
 # You can contact me at the following email address:
 # hugo@hugomatic.ca
 #
-# g81 g83 contributed by Michael Haberler
+# Thanks to Michael Haberler for his g81 g83 contribution
 #
 
 
@@ -43,39 +43,46 @@ def take_a_break():
 # remember: 1 inch = 25.4 millimeters
                    
 params = hugomatic.toolkit.Parameters('Drill Circular holes', 
-                                      'Perform a uniform drill holes around a point using the drilling code g81. If the hole depth is greater than twice the drill diameter,  g83 (drill pecking) is used instead.', 
+                                      'Perform a uniform drill holes around a point using the drilling code g81 or g83.', 
                                       picture_file="holecircle.gif",
                                       debug_callback=take_a_break)
 
 
 
-gcodeUnits = 'mm'  
-params.addArgument( gcodeUnits, 'Program units... 1 inch = 25.4 millimeters', choices=('Inches', 'mm'), group='setup')
-
+units = 'mm'  
+params.addArgument( units, 'Program units... 1 inch = 25.4 millimeters', choices=('Inches', 'mm'), group='setup')
+drill_diameter = 3
+params.addArgument(drill_diameter , 'Drill diameter', group="setup")
 feed = 100
 params.addArgument(feed , 'Feed rate in units/min', group="setup")
-dwell = 0.1
-params.addArgument(dwell , 'Dwell time or 0 for no dwell', group="setup")
-zSafe = 5
-params.addArgument(zSafe , 'Safe height above work piece', group="setup")
-drillDiameter = 3
-params.addArgument(drillDiameter , 'Drill diameter', group="setup")
 
 
-zDepth = -2
-params.addArgument(zDepth , 'Final depth (negative)')
-centerX = 0.
-params.addArgument(centerX, 'Circle center X')
-centerY = 0.
-params.addArgument(centerY, 'Circle center Y')
+z_safe = 5
+params.addArgument(z_safe , 'Safe height above work piece', group="height")
+z_rapid = 1.5
+params.addArgument(z_rapid , 'Rapid plane right above work piece where rapid movement stops', group="height")
+z_depth = -2
+params.addArgument(z_depth , 'Final depth (along Z, negative)', group = 'height')
+
+pecking = True
+params.addArgument(pecking , 'Use pecking (multiple up and down to clean the drill flutes)', group = 'peck')
+peck = 6.0
+params.addArgument(peck , 'Peck height (positive) for each drill cut', group="peck")
+
+center_x = 0.
+params.addArgument(center_x, 'Circle center X')
+center_y = 0.
+params.addArgument(center_y, 'Circle center Y')
 radius = 1.
 params.addArgument(radius, 'Circle radius')
-startAngle = 0.
-params.addArgument(startAngle, 'Start Angle')
-IncrementAngle = 15.
-params.addArgument(IncrementAngle, 'Increment Angle (angle between operations)')
-holeCount = 6
-params.addArgument(holeCount, 'Hole count')
+start_angle = 0.
+params.addArgument(start_angle, 'Start Angle')
+increment_angle = 15.
+params.addArgument(increment_angle, 'Increment Angle (angle between operations)')
+hole_count = 6
+params.addArgument(hole_count, 'Hole count')
+dwell = 0.1
+params.addArgument(dwell , 'Dwell (pause) time before xy movement or 0 for no dwell')
 
 
 angle = 0.
@@ -84,30 +91,31 @@ y = 0.
 z = 0.
 
 
-# if drill depth > maxvertical, switch to G83 peck cycle
-maxvertical = drillDiameter * 2.0
-# retract to drillDiamater above piece every maxvertical feeds
-retractlevel = drillDiameter
+
+# retract to z_rapid above piece every peck feeds
+
 #
 # Generation
 #
 if params.loadParams():
-    hugomatic.code.header(gcodeUnits, feed)
+    hugomatic.code.header(units, feed)
     
-    for i in range(holeCount):
-        print "G0 z%.4f" % zSafe
-        angle = startAngle + i * IncrementAngle
+    for i in range(hole_count):
+        print "G0 z%.4f" % z_safe
+        angle = start_angle + i * increment_angle
         rads = math.radians(angle)
         x = radius * math.cos(rads)
         y = radius * math.sin(rads)
         print
         print "(hole number %d)" % (i+1)        
         # use peck drilling if depth > 2 times drill diameter
-        if math.fabs(zDepth) > maxvertical:
-            print "g83 x%(x).4f y%(y).4f z%(zDepth).4f q%(maxvertical).4f r%(retractlevel).4f" % globals()
+        if pecking:
+            print "g83 x%(x).4f y%(y).4f z%(z_depth).4f q%(peck).4f r%(z_rapid).4f" % globals()
         else:
-            print "g81 x%(x).4f y%(y).4f z%(zDepth).4f" % globals()
-    
-    print    
+            print "G0 z%.4f" % z_rapid
+            print "g81 x%(x).4f y%(y).4f z%(z_depth).4f" % globals()
+        if dwell > 0:
+            print "G4 p%(dwell).4f (Pause to avoid moving while drill is still in the hole)" % globals()
+    print "G0 z%.4f (Done)" % z_safe
     print hugomatic.code.footer()
 
