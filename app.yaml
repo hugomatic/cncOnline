@@ -1,0 +1,39 @@
+application: machinetouch
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /favicon.ico
+  static_files: hugomatic/web/stylesheets/img/favicon.ico
+  upload: hugomatic/web/stylesheets/img/favicon.ico
+
+- url: /images/(.*\.(gif|png|jpg))
+  static_files: images/\1
+  upload: images/(.*\.(gif|png|jpg))
+
+- url: /hugomatic/web/stylesheets/img/(.*\.(gif|png|jpg))
+  static_files: hugomatic/web/stylesheets/img/\1
+  upload: hugomatic/web/stylesheets/img/(.*\.(gif|png|jpg))
+  
+- url: /hugomatic/web/stylesheets/(.*\.(css|js))
+  static_files: hugomatic/web/stylesheets/\1
+  upload: hugomatic/web/stylesheets/(.*\.(css|js))
+  
+- url: /hugomatic/web/stylesheets/jquery/(.*\.(css|js))
+  static_files: hugomatic/web/stylesheets/jquery/\1
+  upload: hugomatic/web/stylesheets/jquery/(.*\.(css|js))  
+
+- url: /hugomatic/web/stylesheets/jquery/images/(.*\.(gif|png|jpg))
+  static_files: hugomatic/web/stylesheets/jquery/images/\1
+  upload: hugomatic/web/stylesheets/jquery/images/(.*\.(gif|png|jpg))  
+
+- url: /(.*\.(py|html))
+  script: /\1
+
+- url: /
+  script: /index.py
+
+- url: /hugomatic/web/(.*\.(py|html))
+  script: /hugomatic/web/\1
