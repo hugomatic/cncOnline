@@ -19,7 +19,7 @@
 # http://hugomatic.ca/source/cncOnline
 #
 # You can contact me at the following email address:
-# hugo@hugomatic.ca
+# hugo
 #
 # Thanks to Michael Haberler for his g81 g83 contribution
 #
@@ -39,17 +39,17 @@ def take_a_break():
 
 ########################################
 # Program GUI
-# 
+#
 # remember: 1 inch = 25.4 millimeters
-                   
-params = hugomatic.toolkit.Parameters('Drill Circular holes', 
-                                      'Perform a uniform drill holes around a point using the drilling code g81 or g83.', 
+
+params = hugomatic.toolkit.Parameters('Drill Circular holes',
+                                      'Perform a uniform drill holes around a point using the drilling code g81 or g83.',
                                       picture_file="holecircle.gif",
                                       debug_callback=take_a_break)
 
 
 
-units = 'mm'  
+units = 'mm'
 params.addArgument( units, 'Program units... 1 inch = 25.4 millimeters', choices=('Inches', 'mm'), group='setup')
 drill_diameter = 3
 params.addArgument(drill_diameter , 'Drill diameter', group="setup")
@@ -99,23 +99,24 @@ z = 0.
 #
 if params.loadParams():
     hugomatic.code.header(units, feed)
-    
+
     for i in range(hole_count):
         print "G0 z%.4f" % z_safe
         angle = start_angle + i * increment_angle
         rads = math.radians(angle)
-        x = radius * math.cos(rads)
-        y = radius * math.sin(rads)
+        x = radius * math.cos(rads) + center_x
+        y = radius * math.sin(rads) + center_y
         print
-        print "(hole number %d)" % (i+1)        
+        print "(hole number %d)" % (i+1)
         # use peck drilling if depth > 2 times drill diameter
         if pecking:
             print "g83 x%(x).4f y%(y).4f z%(z_depth).4f q%(peck).4f r%(z_rapid).4f" % globals()
         else:
             print "G0 z%.4f" % z_rapid
-            print "g81 x%(x).4f y%(y).4f z%(z_depth).4f" % globals()
+            print "g81 x%(x).4f y%(y).4f z%(z_depth).4f r%(z_rapid).4f" % globals()
         if dwell > 0:
             print "G4 p%(dwell).4f (Pause to avoid moving while drill is still in the hole)" % globals()
     print "G0 z%.4f (Done)" % z_safe
     print hugomatic.code.footer()
+
 
