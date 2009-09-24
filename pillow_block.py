@@ -297,17 +297,17 @@ if params.loadParams():  # the result is False if the window is closed without p
            tool_changer.change_tool(tool_dia, 'Contour mill', 'end mill')
            x = x0
            y = y0 + bearing_center_y
-           z = bearing_large_depth
+           cuts = hugomatic.code.z_cut_compiler(bearing_large_depth, cut)
            diameter = bearing_large_dia
-           hugomatic.code.circle_heli_tool_inside(x, y, diameter, z, z_safe, z_rapid, tool_dia, cut)
+           hugomatic.code.circle_heli_tool_inside(x, y, diameter, z_safe, z_rapid, tool_dia, cuts)
         
         if operation_bearing_small:
             tool_changer.change_tool(tool_dia, 'Contour mill', 'end mill')
             x = x0
             y = y0 + bearing_center_y
             diameter = bearing_small_dia
-            z = z_bearing
-            hugomatic.code.circle_heli_tool_inside(x, y, diameter, z, z_safe, z_rapid, tool_dia, cut)
+            cuts = hugomatic.code.z_cut_compiler(z_bearing, cut)
+            hugomatic.code.circle_heli_tool_inside(x, y, diameter, z_safe, z_rapid, tool_dia, cuts)
            
         if operation_bearing_floor or operation_bearing_head:
             tool_changer.change_tool(tool_dia, 'Contour mill', 'end mill')

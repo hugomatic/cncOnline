@@ -97,16 +97,16 @@ def connector12v(x0, y0, vertical, cut):
         y_bottom_wire= y0  - 3.
     
     # compute various depths    
-    zsurf = 0.0
+    z_surf = 0.0
     cuts_main = hugomatic.code.z_cut_compiler(-11.0, cut)
-    cuts_deep = hugomatic.code.z_cut_compiler(-15.0, cut, zsurf = -11.0)
+    cuts_deep = hugomatic.code.z_cut_compiler(-15.0, cut, z_surf = -11.0)
     cuts_tool = hugomatic.code.z_cut_compiler(-4.0, cut)
     cuts_wire = hugomatic.code.z_cut_compiler(-6.0, cut)
     
-    hugomatic.code.pocketRectangle(x_left_main, y_top_main, x_right_main, y_bottom_main, zsafe, zsurf,tooldia, cuts_main)
-    hugomatic.code.pocketRectangle(x_left_tool, y_top_tool, x_right_tool, y_bottom_tool, zsafe, zsurf, tooldia, cuts_tool)
-    hugomatic.code.pocketRectangle(x_left_deep, y_top_deep, x_right_deep, y_bottom_deep, zsafe, zsurf,  tooldia, cuts_deep)
-    hugomatic.code.pocketRectangle(x_left_wire, y_top_wire, x_right_wire, y_bottom_wire, zsafe, zsurf, tooldia, cuts_wire)
+    hugomatic.code.pocket_rectangle(x_left_main, y_top_main, x_right_main, y_bottom_main, z_safe, z_surf,tool_dia, cuts_main)
+    hugomatic.code.pocket_rectangle(x_left_tool, y_top_tool, x_right_tool, y_bottom_tool, z_safe, z_surf, tool_dia, cuts_tool)
+    hugomatic.code.pocket_rectangle(x_left_deep, y_top_deep, x_right_deep, y_bottom_deep, z_safe, z_surf,  tool_dia, cuts_deep)
+    hugomatic.code.pocket_rectangle(x_left_wire, y_top_wire, x_right_wire, y_bottom_wire, z_safe, z_surf, tool_dia, cuts_wire)
     
     # extra pocket for wires (vertical connector only) 
     if vertical:
@@ -114,7 +114,7 @@ def connector12v(x0, y0, vertical, cut):
         x_left_wire2   = x0
         y_top_wire2    = 0.  + 3.
         y_bottom_wire2 = 0  - 3.
-        hugomatic.code.pocketRectangle(x_left_wire2, y_top_wire2, x_right_wire2, y_bottom_wire2, zsafe, zsurf, tooldia, cuts_wire)
+        hugomatic.code.pocket_rectangle(x_left_wire2, y_top_wire2, x_right_wire2, y_bottom_wire2, z_safe, z_surf, tool_dia, cuts_wire)
 
 
                 
@@ -124,14 +124,14 @@ params = hugomatic.toolkit.Parameters('Gizmo LED base',
                                       picture_file = 'gizmoLed.gif',
                                       debug_callback=take_a_break)
 
-tooldia = 3.175
-params.addArgument(tooldia, 'Tool diameter, in mm', group='setup')
+tool_dia = 3.175
+params.addArgument(tool_dia, 'Tool diameter, in mm', group='setup')
 cut = 3.
 params.addArgument(cut, 'Cut per pass, in mm', group='setup')
 feed = 200.
 params.addArgument(feed, 'Feed rate, in mm/min', group='setup')
-zsafe = 10.0
-params.addArgument(zsafe, 'Safe Z above surface in mm', group='setup') 
+z_safe = 10.0
+params.addArgument(z_safe, 'Safe Z above surface in mm', group='setup') 
 
 top = False
 params.addArgument(top,'Plexiglass top side holder slot', group='top side opertation')
@@ -158,20 +158,20 @@ params.addArgument(bar_width, 'The width of the stock, in mm')
 if params.loadParams():       
     hugomatic.code.header_mm(feed)
     
-    zsurf = 0
+    z_surf = 0
 
-    print "g0 Z%.4f" % zsafe
+    print "g0 Z%.4f" % z_safe
     
     if top:
         xleft = plexi_length *-0.5 - 2.
         xright = -xleft
         ytop    = 5.5 * 0.5
         ybottom= -ytop
-        zdepth = -4.0
+        z_depth = -4.0
         
         # large pocket for the plexi
-        cuts = hugomatic.code.z_cut_compiler(zdepth, cut, zsurf= 0.0)
-        hugomatic.code.pocketRectangle(xleft, ytop, xright, ybottom, zsafe, zsurf, tooldia, cuts)
+        cuts = hugomatic.code.z_cut_compiler(z_depth, cut, z_surf= 0.0)
+        hugomatic.code.pocket_rectangle(xleft, ytop, xright, ybottom, z_safe, z_surf, tool_dia, cuts)
     
     # LED array
     if bottom:
@@ -181,36 +181,34 @@ if params.loadParams():
         ybottom= -ytop
         xleft = -42.0
         xright = -xleft
-        zdepth = -4.0
-        cuts = hugomatic.code.z_cut_compiler(zdepth, cut, zsurf= 0.0)
-        hugomatic.code.pocketRectangle(xleft, ytop, xright, ybottom, 
-                                       zsafe, zsurf, 
-                                       tooldia, cuts)
+        z_depth = -4.0
+        cuts = hugomatic.code.z_cut_compiler(z_depth, cut, z_surf= 0.0)
+        hugomatic.code.pocket_rectangle(xleft, ytop, xright, ybottom, z_safe, z_surf,  tool_dia, cuts)
+        
         
         
         # second pocket for the LEDs 
-        zNewSurface =  zdepth
+        zNewSurface =  z_depth
         ytop = 4.6
         ybottom= -ytop
-        zsurf = -4.0
-        zdepth = -9.0
+        z_surf = -4.0
+        z_depth = -9.0
         xleft = -40.0
         xright = -xleft
-        cuts = hugomatic.code.z_cut_compiler(zdepth, cut, zsurf= zNewSurface)
-        hugomatic.code.pocketRectangle(xleft, ytop, xright, ybottom, zsafe, zsurf, tooldia, cuts)
+        cuts = hugomatic.code.z_cut_compiler(z_depth, cut, z_surf= zNewSurface)
+        hugomatic.code.pocket_rectangle(xleft, ytop, xright, ybottom, z_safe, z_surf, tool_dia, cuts)
         
         # deep pocket for LEDs to the plexiglass (should go trough the stock when top is done)
-        z_new_surface =  zdepth
+        z_new_surface =  z_depth
         ytop    = 5.5 * 0.5
         ybottom = -ytop
-        zdepth = -15.0
+        z_depth = -15.0
         
         xleft = -38.0
         xRight = -xleft
-        cuts = hugomatic.code.z_cut_compiler(zdepth, cut, zsurf = z_new_surface)
-        hugomatic.code.pocketRectangle(xleft, ytop, xright, ybottom, zsafe, z_new_surface, tooldia, cuts)
-        zsurf = 0.0
-        
+        cuts = hugomatic.code.z_cut_compiler(z_depth, cut, z_surf = z_new_surface)
+        hugomatic.code.pocket_rectangle(xleft, ytop, xright, ybottom, z_safe, z_new_surface, tool_dia, cuts)
+        z_surf = 0.0
         
     #pockets for the black 12V coax connector    
     if  do_vertical_connector:

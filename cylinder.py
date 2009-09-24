@@ -45,16 +45,17 @@ params.addArgument( units, 'Program units', choices=('Inches', 'mm'), group='set
 feed = 4.0
 params.addArgument(feed, 'Feed rate in units per minute', group='setup')
 
-tooldia = 0.25
-params.addArgument(tooldia, 'Tool diameter in units', group='setup')
+tool_dia = 0.25
+params.addArgument(tool_dia, 'Tool diameter in units', group='setup')
 
 cut = 0.1
 params.addArgument(cut, 'Cut per pass in units', group='setup')
 
-zsafe = 0.1
-params.addArgument(zsafe, 'Safe Z above surface', group='setup')
-zsurf = 0.
-params.addArgument(zsurf, 'Surface Z ', group='setup')
+z_safe = 0.1
+params.addArgument(z_safe, 'Safe Z above surface', group='setup')
+
+z_rapid = 0.05
+params.addArgument(z_rapid, 'Rapid plane Z where rapid movement stops', group='setup')
 
 x = 0.
 params.addArgument(x, 'Cylinder center X', group='pocket')
@@ -62,8 +63,8 @@ y = 0.
 params.addArgument(y, 'Cylinder center Y', group='pocket')
 diameter = 0.75
 params.addArgument(diameter, 'Diameter', group='pocket')
-zdepth = -0.2
-params.addArgument(zdepth, 'Final Z depth (a negative number)', group='pocket')
+z_depth = -0.2
+params.addArgument(z_depth, 'Final Z depth (a negative number)', group='pocket')
 
 
 #if __name__ == "__main__":
@@ -71,7 +72,7 @@ if params.loadParams():
 
     hugomatic.code.header(units, feed)
     
-    print "g0 z%.4f" % zsafe
-    cuts = hugomatic.code.z_cut_compiler(zdepth, cut, zsurf= zsurf) 
-    hugomatic.code.cylinder(x, y, diameter, zsafe, tooldia, cuts)
+    print "g0 z%.4f" % z_safe
+    cuts = hugomatic.code.z_cut_compiler(z_depth, cut) 
+    hugomatic.code.cylinder(x, y, diameter, z_safe, z_rapid, tool_dia, cuts)
     hugomatic.code.footer()

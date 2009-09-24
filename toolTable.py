@@ -31,14 +31,14 @@ def take_a_break():
     but don't call print, because the program will go into an infinite loop."""
     a = 42
 
-def tool_hole(x,y, d1,z1, d2,z2, tooldia, zsafe):
-    print "g0 z%.4f" % zsafe
+def tool_hole(x,y, d1,z1, d2,z2, tooldia, z_safe, z_rapid):
+    print "g0 z%.4f" % z_safe
     r1 = 0.5 * d1
     
     cuts = hugomatic.code.z_cut_compiler(z1,cut)
-    hugomatic.code.cylinder(x, y, d1, tooldia, zsafe, cuts)
-    cuts = hugomatic.code.z_cut_compiler(z2,cut,zsurf=z1)
-    hugomatic.code.cylinder(x, y, d2, tooldia, z1, cuts)
+    hugomatic.code.cylinder(x, y, d1, tooldia, z_safe, z_rapid, cuts)
+    cuts = hugomatic.code.z_cut_compiler(z2,cut,z_surf=z1)
+    hugomatic.code.cylinder(x, y, d2, tooldia, z1, z_rapid, cuts)
     
 # Create the Parameters object. It is used to create the GUI and set values in global variables
 params = hugomatic.toolkit.Parameters('Tool table', 'Keep your precious tools in order', 
@@ -54,8 +54,10 @@ feed = 4.0
 params.addArgument(feed,  'Feed rate in units per minute', group='setup' )
 cut = 0.05
 params.addArgument(cut, 'Cut per pass in units', group='setup')
-zsafe = 0.1
-params.addArgument(zsafe, 'Safe Z above surface in units', group='setup')                
+z_safe = 0.1
+params.addArgument(z_safe, 'Safe Z above surface in units', group='setup')    
+z_rapid = 0.05
+params.addArgument(z_rapid, 'Rapid plane Z where rapid movement stops', group='setup')            
 #zdepth = -0.1
 #params.addArgument(zdepth,  'Depth of cut in units', group='pockets' ) 
 d1 =  1.01
@@ -94,6 +96,6 @@ if params.loadParams():  # the result is False if the window is closed without p
         for c in range(columns):
             x = x0 + c*dx
             y = y0 +  r*dy
-            tool_hole(x,y,d1,z1,d2,z2, tooldia, zsafe)
+            tool_hole(x,y,d1,z1,d2,z2, tooldia, z_safe, z_rapid)
     
     hugomatic.code.footer()

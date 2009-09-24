@@ -39,18 +39,18 @@ params = hugomatic.toolkit.Parameters('Helical circle', 'Round and down',
 gcodeUnits = 'Inches'  
 params.addArgument( gcodeUnits, 'Program units... 1 inch = 25.4 millimeters', choices=('Inches', 'mm'), group='setup' )
 # When publishing numbers. the default value determines the type (int or float...)                    
-tooldia = 0.125
-params.addArgument(tooldia,  'Tool diameter in units', group='setup' )
+tool_dia = 0.125
+params.addArgument(tool_dia,  'Tool diameter in units', group='setup' )
 feed = 4.0 
 params.addArgument(feed,  'Feed rate in units per minute', group='setup' )
-zsafe = 0.1
-params.addArgument(zsafe, 'Safe Z above surface in units', group='setup')   
-zsurf = 0.
-params.addArgument(zsurf, 'Surface Z', group='setup')  
+z_safe = 0.1
+params.addArgument(z_safe, 'Safe Z above surface in units', group='setup')   
+z_rapid = 0.05
+params.addArgument(z_rapid, 'Rapid plane above surface Z', group='setup')  
 cut = 0.05
 params.addArgument(cut, 'Cut per pass in units', group='setup')          
-zdepth = -0.1
-params.addArgument(zdepth,  'Depth of cut in units', group='setup' ) 
+z_depth = -0.1
+params.addArgument(z_depth,  'Depth of cut in units', group='setup' ) 
 
 
 modes=('Tool outside circle', 'Tool inside circle', 'Tool on circle')
@@ -82,20 +82,21 @@ if params.loadParams():  # the result is False if the window is closed without p
     print "(Units: %s)" % gcodeUnits    
     # generate GCODE here!
     hugomatic.code.header(gcodeUnits, feed)   
-         
+    
+    cuts = hugomatic.code.z_cut_compiler(z_depth, cut)
     for j in range(ycount):
         for i in range (xcount):
             x   = x0 + i * dx
             y = y0 + j * dy
             
             if mode == modes[0]: # tool outside
-                hugomatic.code.circle_heli_tool_outside(x, y, diameter,  zdepth, zsafe, zsurf, tooldia, cut )
+                hugomatic.code.circle_heli_tool_outside(x, y, diameter,  z_depth, z_safe, z_rapid, tool_dia, cuts )
             
             if mode == modes[1]: # tool inside
-                hugomatic.code.circle_heli_tool_inside(x, y, diameter,  zdepth, zsafe, zsurf, tooldia, cut )
+                hugomatic.code.circle_heli_tool_inside(x, y, diameter,  z_depth, z_safe, z_rapid, tool_dia, cuts )
                 
             if mode == modes[2]: # tool on
-                hugomatic.code.circle_heli(x, y, diameter,  zdepth, zsafe, zsurf, cut )
+                hugomatic.code.circle_heli(x, y, diameter, z_safe, z_rapid, cuts )
                
-    print "g0 Z%.4f (move tool out of the way)" % zsafe
+    print "g0 Z%.4f (move tool out of the way)" % z_safe
     hugomatic.code.footer()

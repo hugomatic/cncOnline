@@ -74,11 +74,11 @@ params.addArgument(z3,  'Z 3', group='turn' )
 def shaft_xcut(d0,d1,z0,z1, cut, delta_x, delta_z):
     x0 = 0.5 * d0
     x1 = 0.5 * d1
-    cuts = hugomatic.code.z_cut_compiler(x1, cut, zsurf=x0);
+    cuts = hugomatic.code.z_cut_compiler(x1, cut, z_surf=x0);
     print "(shaft )"
     xsafe = x0 + delta_x
-    zsafe = z0 +delta_z
-    print "g0 x%.4f Z%.4f (move close)" % (xsafe, zsafe)
+    z_safe = z0 +delta_z
+    print "g0 x%.4f Z%.4f (move close)" % (xsafe, z_safe)
     
     previous_x = xsafe
     for x in cuts:

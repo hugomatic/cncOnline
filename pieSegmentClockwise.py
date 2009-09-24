@@ -47,17 +47,17 @@ params.addArgument( units, 'Program units', choices=('Inches', 'mm'), group='set
 feed = 4.0
 params.addArgument(feed, 'Feed rate in units per minute', group='setup')
 
-toolDia = 0.25
-params.addArgument(toolDia, 'Tool diameter in units', group='setup')
+tool_dia = 0.25
+params.addArgument(tool_dia, 'Tool diameter in units', group='setup')
 
 cut = 0.1
 params.addArgument(cut, 'Cut per pass in units', group='setup')
 
-zSurf = 0.
-params.addArgument(zSurf, 'Surface Z ', group='setup')
+z_rapid = 0.05
+params.addArgument(z_rapid, 'Rapid plane Z where rapid movement stops', group='setup')
 
-zSafe = 0.1
-params.addArgument(zSafe, 'Safe Z above surface', group='setup')
+z_safe = 0.1
+params.addArgument(z_safe, 'Safe Z above surface', group='setup')
 
 degAngleFromHorizonStart = 45.
 params.addArgument(degAngleFromHorizonStart, 'Start angle (horizon = 0, counter clockwise positive)', group='pocket')
@@ -71,14 +71,14 @@ params.addArgument(x, 'Pie center X', group='pocket')
 y = 2.
 params.addArgument(y, 'Pie center Y', group='pocket') 
 
-insideDia = 1.0
-params.addArgument(insideDia, 'Inside diameter', group='pocket') 
+inside_dia = 1.0
+params.addArgument(inside_dia, 'Inside diameter', group='pocket') 
 
-outsideDia = 2.0
-params.addArgument(outsideDia, 'Outside diameter', group='pocket')
+outside_dia = 2.0
+params.addArgument(outside_dia, 'Outside diameter', group='pocket')
 
-zDepth = -1.
-params.addArgument(zDepth, 'Final Z depth (a negative number)', group='pocket')
+z_depth = -1.
+params.addArgument(z_depth, 'Final Z depth (a negative number)', group='pocket')
 
 comp = False
 params.addArgument(comp, 'Compensate for tool diameter (mill inside the specified dimensions )', group='pocket')
@@ -88,10 +88,10 @@ if params.loadParams():
 
     hugomatic.code.header(units, feed)
     
-    print "g0 z%.4f" % zSafe
-    cuts = hugomatic.code.z_cut_compiler(zDepth, cut, zsurf= zSurf)
+    print "g0 z%.4f" % z_safe
+    cuts = hugomatic.code.z_cut_compiler(z_depth, cut)
     if not comp:
-        hugomatic.code.pie_segment(degAngleFromHorizonStart, degAngleFromHorizonEnd, x, y, insideDia, outsideDia, toolDia, zSafe, cuts)
+        hugomatic.code.pie_segment(degAngleFromHorizonStart, degAngleFromHorizonEnd, x, y, inside_dia, outside_dia, tool_dia, z_safe, z_rapid, cuts)
     else:
-        hugomatic.code.pie_segmentToolComp(degAngleFromHorizonStart, degAngleFromHorizonEnd, x, y, insideDia, outsideDia, toolDia, zSafe, cuts)
+        hugomatic.code.pie_segmentToolComp(degAngleFromHorizonStart, degAngleFromHorizonEnd, x, y, inside_dia, outside_dia, tool_dia, z_safe, z_rapid, cuts)
     hugomatic.code.footer()

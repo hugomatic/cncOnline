@@ -58,6 +58,7 @@ stockZ1 = -15.0
 feed = 100.0
 cut = 0.5
 zSafe = 2.0
+
 tool1Dia = 3.0 / 8.0 * 25.4
 
 boardSize = 66.0
@@ -186,7 +187,7 @@ if params.loadParams():
 	print "G0 x0 y0 z%(zSafe).4f" % globals()
 #	print "T1 M06 G43 H0.0"
 
-	zSurf = 0.0        
+	z_surf = 0.0        
 	if xAndOs:
 	    print "(X and O s)"
 	    #print "G20 (imperial)"
@@ -219,7 +220,7 @@ if params.loadParams():
 	if surfacing:
 	    print "(surfacing)"
 		
-	    zSurf = 0.0
+	    z_surf = 0.0
 	    zFinish = - 0.1
 	    print "G0 X0 Y0 Z0"
 	    print "G01 Z%.4f" % surfaceZ
@@ -233,11 +234,11 @@ if params.loadParams():
 	    y0 = yOff + borderWidth
 	    x1 = boardSize - borderWidth + xOff
 	    y1 = boardSize - borderWidth + yOff
-	    zSurf = 0.0
+	    z_surf = 0.0
 	    
-	    cuts = hugomatic.code.z_cut_compiler(zMiddle, cut, zsurf= zSurf)
-	    hugomatic.code.pocketRectangle(x0, y0, x1, y1, zSafe, zSurf, tool1Dia, cuts)
-	    zSurf = zMiddle
+	    cuts = hugomatic.code.z_cut_compiler(zMiddle, cut, z_surf= z_surf)
+	    hugomatic.code.pocket_rectangle(x0, y0, x1, y1, zSafe, z_surf, tool1Dia, cuts)
+	    z_surf = zMiddle
 	    
 	if do_pockets:
 	 print "(pockets: 9 pockets )" 
@@ -247,8 +248,8 @@ if params.loadParams():
 		 y0 = yOff + j * borderWidth + (j-1) * pocketSize 
 		 x1 = x0 + pocketSize
 		 y1 = y0 + pocketSize
-		 cuts = hugomatic.code.z_cut_compiler(zPocket, cut, zsurf= zSurf)
-		 hugomatic.code.pocketRectangle(x0, y0, x1, y1, zSafe, zSurf, tool1Dia, cuts)
+		 cuts = hugomatic.code.z_cut_compiler(zPocket, cut, z_surf= z_surf)
+		 hugomatic.code.pocket_rectangle(x0, y0, x1, y1, zSafe, z_surf, tool1Dia, cuts)
 	    
 
 	if stock:    
