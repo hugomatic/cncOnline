@@ -53,6 +53,9 @@ def getCatalogFileName():
     tail,head = os.path.split(f)
     short_name = head.replace(".py",".xml")
     filename = tail + "/" + short_name
+    # quick fix for a windows path bug
+    if is_windows() and not isWebApplication():
+        filename = "." + filename
     return filename
 
 def removeElement(dom, name):
