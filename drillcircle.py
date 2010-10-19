@@ -51,17 +51,17 @@ params = hugomatic.toolkit.Parameters('Drill Circular holes',
 
 units = 'mm'
 params.addArgument( units, 'Program units... 1 inch = 25.4 millimeters', choices=('Inches', 'mm'), group='setup')
-drill_diameter = 3
+drill_diameter = 3.
 params.addArgument(drill_diameter , 'Drill diameter', group="setup")
-feed = 100
+feed = 100.
 params.addArgument(feed , 'Feed rate in units/min', group="setup")
 
 
-z_safe = 5
+z_safe = 5.
 params.addArgument(z_safe , 'Safe height above work piece', group="height")
 z_rapid = 1.5
 params.addArgument(z_rapid , 'Rapid plane right above work piece where rapid movement stops', group="height")
-z_depth = -2
+z_depth = -2.
 params.addArgument(z_depth , 'Final depth (along Z, negative)', group = 'height')
 
 pecking = True
