@@ -33,6 +33,7 @@ def takeAbreak():
     but don't call print, because the program will go into an infinite loop.
     """
     a = 42 
+    print "(--- THIS IS THE DEBUG LINE! ---)"
 
 params = hugomatic.toolkit.Parameters('Rectangular pocket', 
                                       'Very popular, beyond squares', 
@@ -68,7 +69,7 @@ z_depth = -0.2
 params.addArgument(z_depth, 'Final Z depth (a negative number)', group='pocket')
 
 
-#if __name__ == "__main__":
+#if __name__ == "__main__": b
 if params.loadParams():    
 
     hugomatic.code.header(units, feed)
